@@ -11,7 +11,7 @@ var package = Package(
     ],
     dependencies: [
         // For MongoDB Documents
-        //.package(url: "https://github.com/OpenKitten/BSON.git", from: "5.1.5"),
+        //.package(url: "https://github.com/OpenKitten/BSON.git", from: "5.1.6"),
         
         // For ExtendedJSON support
         //.package(url: "https://github.com/OpenKitten/Cheetah.git", from: "1.0.3"),
