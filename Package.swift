@@ -1,29 +1,36 @@
+// swift-tools-version:4.0
+
 import PackageDescription
 
 var package = Package(
     name: "MongoKitten",
-    targets: [
-        Target(name: "GeoJSON"),
-        Target(name: "MongoSocket"),
-        Target(name: "ExtendedJSON"),
-        Target(name: "MongoKitten", dependencies: ["GeoJSON", "MongoSocket", "ExtendedJSON"])
-        ],
+    products: [
+        .library(name: "MongoKitten", targets: ["MongoKitten"]),
+        .library(name: "GeoJSON", targets: ["GeoJSON"]),
+        .library(name: "ExtendedJSON", targets: ["ExtendedJSON"]),
+    ],
     dependencies: [
         // For MongoDB Documents
-        .Package(url: "https://github.com/OpenKitten/BSON.git", versions: Version(5, 1, 2) ..< Version(5, 2, 0)),
+        .package(url: "https://github.com/OpenKitten/BSON.git", from: "5.1.5"),
         
         // For ExtendedJSON support
-        .Package(url: "https://github.com/OpenKitten/Cheetah.git", majorVersion: 1),
+        .package(url: "https://github.com/OpenKitten/Cheetah.git", from: "1.0.3"),
 
         // Authentication
-        .Package(url: "https://github.com/OpenKitten/CryptoKitten.git", majorVersion: 0, minor: 2),
+        .package(url: "https://github.com/OpenKitten/CryptoKitten.git", from: "0.2.3"),
 
         // Asynchronous behaviour
-        .Package(url: "https://github.com/OpenKitten/Schrodinger.git", majorVersion: 1),
+        .package(url: "https://github.com/OpenKitten/Schrodinger.git", from: "1.0.1"),
+    ],
+    targets: [
+        .target(name: "GeoJSON", dependencies: []),
+        .target(name: "MongoSocket", dependencies: []),
+        .target(name: "ExtendedJSON", dependencies: []),
+        .target(name: "MongoKitten", dependencies: ["GeoJSON", "MongoSocket", "ExtendedJSON"])
     ]
 )
 
 // Provides Sockets + SSL
 #if !os(macOS) && !os(iOS)
-package.dependencies.append(.Package(url: "https://github.com/OpenKitten/KittenCTLS.git", majorVersion: 1))
+package.dependencies.append(.package(url: "https://github.com/OpenKitten/KittenCTLS.git", majorVersion: 1))
 #endif
