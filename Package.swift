@@ -11,16 +11,16 @@ var package = Package(
     ],
     dependencies: [
         // For MongoDB Documents
-        .package(url: "https://github.com/OpenKitten/BSON.git", from: "5.1.5"),
+        //.package(url: "https://github.com/OpenKitten/BSON.git", from: "5.1.5"),
         
         // For ExtendedJSON support
-        .package(url: "https://github.com/OpenKitten/Cheetah.git", from: "1.0.3"),
+        //.package(url: "https://github.com/OpenKitten/Cheetah.git", from: "1.0.3"),
 
         // Authentication
-        .package(url: "https://github.com/OpenKitten/CryptoKitten.git", from: "0.2.3"),
+        //.package(url: "https://github.com/OpenKitten/CryptoKitten.git", from: "0.2.3"),
 
         // Asynchronous behaviour
-        .package(url: "https://github.com/OpenKitten/Schrodinger.git", from: "1.0.1"),
+        //.package(url: "https://github.com/OpenKitten/Schrodinger.git", from: "1.0.1"),
     ],
     targets: [
         .target(name: "GeoJSON", dependencies: []),
