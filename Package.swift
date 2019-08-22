@@ -14,19 +14,19 @@ var package = Package(
         .package(url: "https://github.com/balazskiss/BSON.git", from: "5.1.6"),
         
         // For ExtendedJSON support
-        //.package(url: "https://github.com/OpenKitten/Cheetah.git", from: "1.0.3"),
+        .package(url: "https://github.com/OpenKitten/Cheetah.git", from: "2.0.3-swift5"), // 1.0.3
 
         // Authentication
-        //.package(url: "https://github.com/OpenKitten/CryptoKitten.git", from: "0.2.3"),
+        .package(url: "https://github.com/OpenKitten/CryptoKitten.git", from: "0.2.4-swift5"), // 0.2.3
 
         // Asynchronous behaviour
-        //.package(url: "https://github.com/OpenKitten/Schrodinger.git", from: "1.0.1"),
+        .package(url: "https://github.com/OpenKitten/Schrodinger.git", from: "1.0.3-swift5"), // 1.0.1
     ],
     targets: [
-        .target(name: "GeoJSON", dependencies: []),
+        .target(name: "GeoJSON", dependencies: ["BSON"]),
         .target(name: "MongoSocket", dependencies: []),
-        .target(name: "ExtendedJSON", dependencies: []),
-        .target(name: "MongoKitten", dependencies: ["GeoJSON", "MongoSocket", "ExtendedJSON"])
+        .target(name: "ExtendedJSON", dependencies: ["BSON", "Cheetah", "CryptoKitten"]),
+        .target(name: "MongoKitten", dependencies: ["BSON", "CryptoKitten", "Schrodinger", "GeoJSON", "MongoSocket", "ExtendedJSON"])
     ]
 )
 
