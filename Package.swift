@@ -32,5 +32,5 @@ var package = Package(
 
 // Provides Sockets + SSL
 #if !os(macOS) && !os(iOS)
-package.dependencies.append(.package(url: "https://github.com/OpenKitten/KittenCTLS.git", from: "1.0.1"))
+package.dependencies.append(.package(url: "https://github.com/OpenKitten/KittenCTLS.git", .branch("master")))
 #endif
