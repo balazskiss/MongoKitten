@@ -33,6 +33,9 @@ extension Array where Element == Document {
 extension JSONObject {
     /// Parses a JSON entity into a BSON Primitive using the ExtendedJSON format
     internal func parseExtendedJSON() -> Primitive {
+        #if os(macOS)
+            fatalError("This method does not compile on macOS")
+        #else
         if keys.count == 1, let key = keys.first {
             switch (key, self[key]) {
             case ("$oid", let string as String):
@@ -73,7 +76,7 @@ extension JSONObject {
         } else if keys.count == 2 {
             if let regex = String(self["$regex"]), let options = String(self["$options"]) {
                 return RegularExpression(pattern: regex, options: regexOptions(fromString: options))
-            } else if let code = String(self["$code"]), let scope = JSONObject(self["$scope"]) {
+            } else if let code = String(self["$code"]), let scope = JSONObject(self["$scope"]) { // This is the line that causes problem on macOS (missing symbol)
                 return JavascriptCode(code: code, withScope: Document(scope))
             } else if let base64 = String(self["$binary"]), let subType = String(self["$type"]) {
                 guard subType.characters.count == 2 else {
@@ -91,6 +94,7 @@ extension JSONObject {
         } else {
             return Document(self)
         }
+        #endif
     }
 }
 
