@@ -33,7 +33,7 @@ extension Array where Element == Document {
 extension JSONObject {
     /// Parses a JSON entity into a BSON Primitive using the ExtendedJSON format
     internal func parseExtendedJSON() -> Primitive {
-        #if os(macOS)
+        #if os(macOS) || os(Linux)
             fatalError("This method does not compile on macOS")
         #else
         if keys.count == 1, let key = keys.first {
