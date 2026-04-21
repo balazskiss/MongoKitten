@@ -78,18 +78,32 @@ class Connection {
     ///
     /// - throws: Authentication error
     func authenticate(to db: Database) throws {
-        if let authenticating = self.authenticating {
+        // Single-flight: only one caller creates the promise and performs the
+        // authentication; concurrent callers await the same promise. All
+        // access to `self.authenticating` is serialized on `mutationsQueue` to
+        // avoid a data race where two callers each install their own promise
+        // and one overwrites (and releases) the other's ManualPromise while
+        // it's still in use.
+        let (authenticating, isAuthenticator): (ManualPromise<Void>, Bool) = Connection.mutationsQueue.sync {
+            if let existing = self.authenticating {
+                return (existing, false)
+            }
+            let promise = ManualPromise<Void>()
+            self.authenticating = promise
+            return (promise, true)
+        }
+
+        if !isAuthenticator {
             return try authenticating.await()
         }
-        
-        let authenticating = ManualPromise<Void>()
-        self.authenticating = authenticating
-        
+
         defer {
             _ = try? authenticating.complete(())
-            self.authenticating = nil
+            Connection.mutationsQueue.sync {
+                self.authenticating = nil
+            }
         }
-        
+
         if let details = db.server.clientSettings.credentials {
             let db = db.server[details.database ?? db.name]
             
